@@ -1,5 +1,12 @@
+BASE_URL=$1
+if [ $# != 1 ]; then
+    >&2 echo "Illegal number of parameters"
+    >&2 echo "Usage send_requests.sh <base_url>"
+    exit
+fi
+
 add_film () {
-    curl --silent -i localhost:8080/api/film \
+    curl --silent -i "$BASE_URL:8080/api/film" \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
     -X POST --data "$1" \
@@ -7,7 +14,7 @@ add_film () {
 }
 
 get_films () {
-    curl --silent -i localhost:8080/api/film \
+    curl --silent -i "$BASE_URL:8080/api/film" \
     -H "Accept: application/json" \
     -H "Content-Type:application/json" \
     | jq -Rr '. as $line | (fromjson? | .) // $line'
